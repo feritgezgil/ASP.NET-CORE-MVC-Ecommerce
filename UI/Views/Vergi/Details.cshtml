@@ -1,0 +1,54 @@
+﻿@model UI.Models.DAL.Taxes
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Taxes</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.c_date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.c_date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.seo_url)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.seo_url)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.is_active)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.is_active)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.is_delete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.is_delete)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,158 @@
+﻿@model UI.Models.UI.DashboardProduct
+@{
+    ViewData["Title"] = "Kayıtlı Ürün Listesi";
+}
+@section Styles{
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <!-- Page level plugins -->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+}
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    @foreach (var item in Model.Attributes)
+    {
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-@item.Style shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-@item.Style text-uppercase mb-1">
+                                @item.Title
+                            </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@item.Value</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="@item.Icon fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<p>
+    <button class="btn btn-outline-info rounded-pill" asp-action="Create">Yeni Ürün Ekle</button>
+</p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Kayıtlı Ürünler</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Campaign Price
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ProductTable)
+                    {
+                        <tr>
+                            <td>
+                                <a class="badge-pill badge badge-light" asp-action="Details" asp-route-id="@item.id" title="Detail">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a class="badge-pill badge badge-info" asp-action="Edit" asp-route-id="@item.id" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.camp_price)
+                            </td>
+                            <td>
+                                @if (item.is_in_camp)
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="campaign" class="badge badge-danger badge-pill" title="In Campaign">
+                                        <i class="fas fa-tags"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="campaign" class="badge badge-dark badge-pill" title="Not In Campaign">
+                                        <i class="fas fa-tags"></i>
+                                    </a>
+                                }
+
+                                @if (item.is_in_stock)
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="stock" class="badge badge-info badge-pill" title="In Stock">
+                                        <i class="fab fa-stack-overflow"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="stock" class="badge badge-dark badge-pill" title="Not In Stock">
+                                        <i class="fab fa-stack-overflow"></i>
+                                    </a>
+                                }
+
+                                @if (item.is_active)
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="active" class="badge badge-success badge-pill" title="Active">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="active" class="badge badge-danger badge-pill" title="Not Active">
+                                        <i class="fas fa-times-circle"></i>
+                                    </a>
+                                }
+
+                                @if (item.is_delete)
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="deleted" class="badge badge-info badge-pill" title="Deleted">
+                                        <i class="fas fa-recycle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="SwitchAttribute" asp-route-id="@item.id" asp-route-attribute="deleted" class="badge badge-warning badge-pill" title="Not Deleted">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

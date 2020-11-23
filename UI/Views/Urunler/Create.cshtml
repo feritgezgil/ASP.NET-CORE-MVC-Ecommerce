@@ -1,0 +1,146 @@
+﻿@model UI.Models.DAL.Products
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link rel="stylesheet" href="~/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="~/app.css">
+    <link href="~/css/dropzone/basic.css" rel="stylesheet" />
+    <link href="~/css/dropzone/dropzone.css" rel="stylesheet" />
+<style>
+    #dropZone {
+        background: gray;
+        border: black dashed 3px;
+        width: 200px;
+        padding: 50px;
+        text-align: center;
+        color: white;
+    }
+</style>
+}
+<h1>Create</h1>
+
+<h4>Products</h4>
+<hr />
+
+<form asp-action="Create" class="row">
+    <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+    <div class="form-group  col-md-6">
+        <label asp-for="name" class="control-label"></label>
+        <input asp-for="name" class="form-control" />
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="price" class="control-label"></label>
+        <input asp-for="price" class="form-control" />
+        <span asp-validation-for="price" class="text-danger"></span>
+    </div>
+    <div class="form-group  col-md-2">
+        <label asp-for="camp_price" class="control-label"></label>
+        <input asp-for="camp_price" class="form-control" />
+        <span asp-validation-for="camp_price" class="text-danger"></span>
+    </div>
+    <div class="form-group  col-md-2">
+        <label asp-for="quantity" class="control-label"></label>
+        <input asp-for="quantity" class="form-control" />
+        <span asp-validation-for="quantity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group  col-md-4">
+        <label asp-for="tax_id" class="control-label"></label>
+        <select asp-for="tax_id" class="form-control" asp-items="ViewBag.tax_id"></select>
+    </div>
+    <div class="form-group  col-md-4">
+        <label asp-for="mensei_id" class="control-label"></label>
+        <select asp-for="mensei_id" class="form-control" asp-items="ViewBag.mensei_id"></select>
+    </div>
+    <div class="form-group  col-md-4">
+        <label for="categories" class="control-label">Kategoriler:</label>
+        <input id="categories" name="categories" class="form-control" />
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="short_desc" class="control-label"></label>
+        <textarea asp-for="short_desc" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="short_desc" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="desc" class="control-label"></label>
+        <textarea asp-for="desc" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="desc" class="text-danger"></span>
+    </div>
+    <div class="custom-control custom-switch col-md-3">
+        <input class="custom-control-input" asp-for="is_in_camp" />
+        <label class="custom-control-label" for="is_in_camp">
+            @Html.DisplayNameFor(model => model.is_in_camp)
+        </label>
+    </div>
+    <div class="custom-control custom-switch col-md-3">
+        <input class="custom-control-input" asp-for="is_in_stock" />
+        <label class="custom-control-label" for="is_in_stock">
+            @Html.DisplayNameFor(model => model.is_in_stock)
+        </label>
+    </div>
+    <div class="custom-control custom-switch col-md-3">
+        <input class="custom-control-input" asp-for="is_active" />
+        <label class="custom-control-label" for="is_active">
+            @Html.DisplayNameFor(model => model.is_active)
+        </label>
+    </div>
+    <div class="form-group  col-md-3 text-right">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+<div class="jumbotron">
+    <form  asp-action="Upload" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="width: 100%; background: none; border: none;">
+        <div class="fallback">
+            <input name="file" type="file" multiple />
+            <input type="submit" value="Yükle" />
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/bootstrap-tagsinput.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script>
+        var cities = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: {
+                url: '/urunler/getcategories',
+                cache: false
+            }
+        });
+        cities.initialize();
+
+        var elt = $('#categories');
+        elt.tagsinput({
+            itemValue: 'id',
+            itemText: 'name',
+            typeaheadjs:
+            {
+                name: 'cities',
+                displayKey: 'name',
+                source: cities.ttAdapter()
+            }
+        });
+    </script>
+    <script src="~/js/dropzone/dropzone.js"></script>
+<script>
+    //File Upload response from the server
+    Dropzone.options.dropzoneForm = {
+        init: function () {
+            this.on("complete", function (data) {
+                //var res = eval('(' + data.xhr.responseText + ')');
+                //var res = JSON.parse(data.xhr.responseText);
+                alert(data.xhr.responseText);
+            });
+        }
+    };
+</script>
+}

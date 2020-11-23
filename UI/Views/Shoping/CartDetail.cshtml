@@ -1,0 +1,145 @@
+﻿@model UI.Models.DAL.Carts
+
+@{
+    ViewData["Title"] = "CartDetail";
+    Layout = "~/Views/Shared/_UX_Layout.cshtml";
+    var stat = (Status)Model.status;
+    string status = stat.ToString();
+
+    decimal totalPrice = 0;
+    foreach (var item in Model.CartItems)
+    {
+        totalPrice += (decimal)(item.ProductQuantity * ((item.Products.is_in_camp) ? item.Products.camp_price : item.Products.price));
+    }
+}
+@section Styles{
+
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+}
+
+@section Scripts{
+    <!-- Page level plugins -->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+}
+
+<!-- Masthead-->
+<header class="masthead" style="height: 100px;padding: 0px;">
+    <!--<div class="container">
+        <div class="masthead-subheading">CartDetail</div>
+        <div class="masthead-heading text-uppercase">It's Nice To Meet You</div>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
+    </div>-->
+</header>
+<!-- Cart Details-->
+<section class="page-section" id="services">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>PID</th>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Is in campaign?</th>
+                                        <th>Price</th>
+                                        <th>Tax Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CartItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ProductId</td>
+                                            <td>@item.Products.name</td>
+                                            <td>@item.ProductQuantity</td>
+
+                                            @if (item.Products.is_in_camp)
+                                            {
+                                                <td>Evet</td>
+                                                <td>@item.Products.camp_price.ToString("C")</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Hayır</td>
+                                                <td>@item.Products.price.ToString("C")</td>
+                                            }
+                                            <td>@item.Products.Taxes.name</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-danger">My Cart: #@Model.id (@status)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="card border-bottom-danger shadow w-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">@Html.DisplayNameFor(model => model.c_date)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.c_date.ToShortDateString()</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card border-bottom-danger shadow w-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Total Price</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@totalPrice.ToString("C")</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-lira-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card border-bottom-danger shadow w-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-md-12 p-1">
+                                            <a href="/urunler" class="btn btn-outline-primary w-100">Continue Shopping</a>
+                                        </div>
+                                        <div class="col-md-12 p-1">
+                                            <a href="/shoping/purchasecart" class="btn btn-outline-success w-100">Purchase Cart</a>
+                                        </div>
+                                        <div class="col-md-12 p-1">
+                                            <a href="/shoping/deletecart" class="btn btn-outline-danger w-100">Delete Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

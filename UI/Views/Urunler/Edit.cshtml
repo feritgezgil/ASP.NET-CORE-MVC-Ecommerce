@@ -1,0 +1,134 @@
+﻿@model UI.Models.DAL.Products
+
+@{
+    ViewData["Title"] = "Edit";
+    string price = Tools.toString(Model.price);
+    string camp_price = Tools.toString(Model.camp_price);
+}
+@section Styles{
+    <link rel="stylesheet" href="~/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="~/app.css">
+}
+<h1>Edit</h1>
+
+<h4>Products</h4>
+<hr />
+<form asp-action="Edit" class="row">
+    <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+    <input asp-for="c_date" class="form-control d-none" />
+    <div class="form-group  col-md-6">
+        <label asp-for="name" class="control-label"></label>
+        <input asp-for="name" class="form-control" />
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="price" class="control-label"></label>
+        <input asp-for="price" value="@price" class="form-control" />
+        <span asp-validation-for="price" class="text-danger"></span>
+    </div>
+    <div class="form-group  col-md-2">
+        <label asp-for="camp_price" class="control-label"></label>
+        <input asp-for="camp_price" value="@camp_price" class="form-control" />
+        <span asp-validation-for="camp_price" class="text-danger"></span>
+    </div>
+    <div class="form-group  col-md-2">
+        <label asp-for="quantity" class="control-label"></label>
+        <input asp-for="quantity" class="form-control" />
+        <span asp-validation-for="quantity" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="seo_url" class="control-label"></label>
+        <input asp-for="seo_url" class="form-control" />
+        <span asp-validation-for="seo_url" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="tax_id" class="control-label"></label>
+        <select asp-for="tax_id" class="form-control" asp-items="ViewBag.tax_id"></select>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="mensei_id" class="control-label"></label>
+        <select asp-for="mensei_id" class="form-control" asp-items="ViewBag.mensei_id"></select>
+    </div>
+    <div class="form-group  col-md-3">
+        <label for="categories" class="control-label">Kategoriler:</label>
+        <input id="categories" name="categories" class="form-control" />
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="short_desc" class="control-label"></label>
+        <textarea asp-for="short_desc" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="short_desc" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="desc" class="control-label"></label>
+        <textarea asp-for="desc" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="desc" class="text-danger"></span>
+    </div>
+
+    <div class="custom-control custom-switch col-md-2">
+        <input class="custom-control-input" asp-for="is_in_camp" />
+        <label class="custom-control-label" for="is_in_camp">
+            @Html.DisplayNameFor(model => model.is_in_camp)
+        </label>
+    </div>
+    <div class="custom-control custom-switch col-md-2">
+        <input class="custom-control-input" asp-for="is_in_stock" />
+        <label class="custom-control-label" for="is_in_stock">
+            @Html.DisplayNameFor(model => model.is_in_stock)
+        </label>
+    </div>
+    <div class="custom-control custom-switch col-md-2">
+        <input class="custom-control-input" asp-for="is_delete" />
+        <label class="custom-control-label" for="is_delete">
+            @Html.DisplayNameFor(model => model.is_delete)
+        </label>
+    </div>
+    <div class="custom-control custom-switch col-md-2">
+        <input class="custom-control-input" asp-for="is_active" />
+        <label class="custom-control-label" for="is_active">
+            @Html.DisplayNameFor(model => model.is_active)
+        </label>
+    </div>
+    <div class="form-group  col-md-4 text-right">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/bootstrap-tagsinput.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script>
+        var cities = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: {
+                url: '/urunler/getcategories',
+                cache: false
+            }
+        });
+        cities.initialize();
+
+        var elt = $('#categories');
+        elt.tagsinput({
+            itemValue: 'id',
+            itemText: 'name',
+            typeaheadjs:
+            {
+                name: 'cities',
+                displayKey: 'name',
+                source: cities.ttAdapter()
+            }
+        });
+        @foreach (var item in (IQueryable<UI.Models.UI.CategoryViewModel>)ViewData["Categories"])
+        {
+            <text>
+                elt.tagsinput('add', { "id": @item.Id, "name":"@item.Title" });
+            </text>
+        }
+
+    </script>
+}

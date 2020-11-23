@@ -1,0 +1,24 @@
+﻿@model UI.Models.UI.SideBar
+@{ bool ModelIsNotNull = (Model != null);
+    Layout = null; }
+@if (ModelIsNotNull)
+{
+<div class="col-lg-3">
+    @foreach (var menu in Model.menus)
+    {
+<h2 class="my-4">@menu.name</h2>
+                    <div class="list-group">
+                        @foreach (var menuItem in menu.MenuItems)
+                        {
+    <a href="@menuItem.url" class="list-group-item">@menuItem.name</a>}
+                    </div>}
+</div> <!-- /.col-lg-3 -->
+                <text>
+                    <div class="col-lg-9">
+                </text> }
+            else
+            {
+<text>
+    <div class="col-lg-12">
+</text>}
+

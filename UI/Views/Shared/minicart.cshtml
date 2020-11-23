@@ -1,0 +1,47 @@
+﻿@{
+    var Model = new UI.Models.UI.MiniCartModel();
+    var ProductCount = Model.Products.Count;
+}
+@if (ProductCount > 0)
+{
+    
+    <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="#" id="cartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-shopping-bag fa-fw"></i>
+            <!-- Counter - CartItems -->
+            <span class="badge badge-danger badge-counter">@ProductCount</span>
+        </a>
+        <!-- Dropdown - CartItems -->
+        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="cartDropdown">
+            <h6 class="dropdown-header">
+                My Cart
+            </h6>
+            @foreach (var item in Model.Products)
+            {
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-danger">
+                            <i class="fa fa-trash text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">@item.name</div>
+                        @if (item.is_in_camp)
+                        {
+                            double productTotalPrice = item.quantity * item.camp_price;
+
+                            <span class="font-weight-bold">@productTotalPrice</span>
+                        }
+                        else
+                        {
+                            double productTotalPrice = item.quantity * item.price;
+
+                            <span class="font-weight-bold">@productTotalPrice</span>
+                        }
+                    </div>
+                </a>
+            }
+            <a class="dropdown-item text-center small text-gray-500" href="#">Purchase Cart</a>
+        </div>
+    </li>
+}
